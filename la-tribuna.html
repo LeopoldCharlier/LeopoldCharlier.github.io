@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Tribuna — Periodismo sin concesiones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafaf8;
+      --bg-secondary: #f2f0eb;
+      --text: #1a1a18;
+      --text-secondary: #5a5a56;
+      --text-tertiary: #9a9a94;
+      --border: rgba(26,26,24,0.12);
+      --border-strong: rgba(26,26,24,0.25);
+      --accent: #1a3a6b;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a18;
+        --bg-secondary: #242422;
+        --text: #f0ede6;
+        --text-secondary: #a0a09a;
+        --text-tertiary: #606058;
+        --border: rgba(240,237,230,0.1);
+        --border-strong: rgba(240,237,230,0.22);
+        --accent: #7fa8d8;
+      }
+    }
+
+    html { background: var(--bg); }
+
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* HEADER */
+    .header {
+      border-bottom: 3px solid var(--text);
+      padding-bottom: 12px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .header-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 300;
+    }
+
+    .blog-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .blog-tagline {
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 300;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav span {
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 2px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav span:hover, .nav span.active {
+      color: var(--text);
+      border-bottom-color: var(--text);
+    }
+
+    .top-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 0 24px;
+    }
+
+    /* FEATURED */
+    .featured {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .featured { grid-template-columns: 1fr; }
+      .featured-main { border-right: none !important; padding-right: 0 !important; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+      .blog-name { font-size: 38px; }
+    }
+
+    .featured-main {
+      border-right: 1px solid var(--border);
+      padding-right: 24px;
+    }
+
+    .category-tag {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 400;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .article-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      line-height: 1.18;
+      margin-bottom: 9px;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .article-title:hover { text-decoration: underline; }
+
+    .featured-main .article-title { font-size: 28px; }
+
+    .article-excerpt {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+
+    .article-byline {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.06em;
+      font-style: italic;
+    }
+
+    .side-articles { display: flex; flex-direction: column; gap: 18px; }
+
+    .side-article {
+      padding-bottom: 16px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .side-article:last-child { border-bottom: none; padding-bottom: 0; }
+    .side-article .article-title { font-size: 16px; }
+    .side-article .article-excerpt { font-size: 13px; margin-bottom: 6px; }
+
+    /* OPINION STRIP */
+    .opinion-strip {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 18px 24px;
+      margin-bottom: 28px;
+    }
+
+    .opinion-quote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 19px;
+      line-height: 1.42;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .opinion-author {
+      font-size: 12px;
+      color: var(--text-secondary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    /* GRID */
+    .grid-section { margin-bottom: 28px; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 400;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 0.5px;
+      background: var(--border);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--border);
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { border-color: var(--border-strong); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .card .article-title { font-size: 15px; }
+    .card .article-excerpt {
+      font-size: 13px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* WRITE CTA */
+    .write-cta {
+      text-align: center;
+      padding: 24px 0 0;
+      border-top: 1px solid var(--border);
+    }
+    .write-cta p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      font-weight: 300;
+    }
+
+    .write-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 10px 22px;
+      cursor: pointer;
+      font-family: 'Source Serif 4', serif;
+      font-weight: 400;
+      transition: opacity 0.2s;
+    }
+    .write-btn:hover { opacity: 0.8; }
+
+    /* ARTICLE VIEW */
+    .article-view { display: none; }
+    .article-view.open { display: block; }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-bottom: 24px;
+      background: none;
+      border: none;
+      font-family: 'Source Serif 4', serif;
+    }
+    .back-btn:hover { color: var(--text); }
+
+    .full-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 600px) { .full-title { font-size: 28px; } }
+
+    .article-divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 16px 0;
+    }
+
+    .full-body {
+      font-size: 17px;
+      line-height: 1.85;
+      font-weight: 300;
+      max-width: 680px;
+    }
+    .full-body p { margin-bottom: 1.3em; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.48);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .editor-panel {
+      background: var(--bg);
+      border-radius: var(--radius-lg);
+      border: 0.5px solid var(--border-strong);
+      padding: 28px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .editor-panel h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    .editor-field { margin-bottom: 16px; }
+
+    .editor-field label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .editor-field input,
+    .editor-field textarea,
+    .editor-field select {
+      width: 100%;
+      font-family: 'Source Serif 4', serif;
+      font-size: 14px;
+      background: var(--bg-secondary);
+      color: var(--text);
+      border: 0.5px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 9px 13px;
+      resize: vertical;
+      outline: none;
+    }
+    .editor-field input:focus,
+    .editor-field textarea:focus,
+    .editor-field select:focus {
+      border-color: var(--accent);
+    }
+
+    .editor-field textarea { min-height: 160px; line-height: 1.65; }
+
+    .editor-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 0.5px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 9px 18px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-family: 'Source Serif 4', serif;
+    }
+    .btn-cancel:hover { color: var(--text); }
+
+    .btn-publish {
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 9px 22px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'Source Serif 4', serif;
+      transition: opacity 0.2s;
+    }
+    .btn-publish:hover { opacity: 0.8; }
+
+    .empty-note {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-style: italic;
+      grid-column: 1 / -1;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- MAIN VIEW -->
+  <div id="main-view">
+    <header class="header">
+      <div class="header-meta">
+        <span id="today-date"></span>
+        <span>Edición digital</span>
+      </div>
+      <div class="blog-name">La Tribuna</div>
+      <div class="blog-tagline">Periodismo sin concesiones</div>
+      <nav class="nav" aria-label="Secciones">
+        <span class="active" onclick="filterCat(this,'')">Todo</span>
+        <span onclick="filterCat(this,'Actualidad')">Actualidad</span>
+        <span onclick="filterCat(this,'Opinión')">Opinión</span>
+        <span onclick="filterCat(this,'Investigación')">Investigación</span>
+        <span onclick="filterCat(this,'Cultura')">Cultura</span>
+        <span onclick="filterCat(this,'Internacional')">Internacional</span>
+      </nav>
+    </header>
+
+    <hr class="top-divider">
+
+    <div class="featured">
+      <div class="featured-main" id="featured-main"></div>
+      <div class="side-articles" id="side-articles"></div>
+    </div>
+
+    <div class="opinion-strip">
+      <div class="opinion-quote" id="quote-text"></div>
+      <div class="opinion-author" id="quote-author"></div>
+    </div>
+
+    <div class="grid-section">
+      <div class="section-header">
+        <span class="section-title">Últimas entradas</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="card-grid" id="card-grid"></div>
+    </div>
+
+    <div class="write-cta">
+      <p>¿Tienes algo que contar? Publica tu artículo en La Tribuna.</p>
+      <button class="write-btn" onclick="openEditor()">✎ Escribir artículo</button>
+    </div>
+  </div>
+
+  <!-- ARTICLE VIEW -->
+  <div class="article-view" id="article-view">
+    <button class="back-btn" onclick="closeArticle()">← Volver</button>
+    <div class="category-tag" id="av-cat"></div>
+    <div class="full-title" id="av-title"></div>
+    <div class="article-byline" id="av-byline"></div>
+    <hr class="article-divider">
+    <div class="full-body" id="av-body"></div>
+  </div>
+
+</div>
+
+<!-- EDITOR MODAL -->
+<div class="modal-overlay" id="editor-modal">
+  <div class="editor-panel">
+    <h2>Nuevo artículo</h2>
+    <div class="editor-field">
+      <label for="e-title">Titular</label>
+      <input type="text" id="e-title" placeholder="El titular que cambiará la historia...">
+    </div>
+    <div class="editor-field">
+      <label for="e-cat">Sección</label>
+      <select id="e-cat">
+        <option>Actualidad</option>
+        <option>Opinión</option>
+        <option>Investigación</option>
+        <option>Cultura</option>
+        <option>Internacional</option>
+      </select>
+    </div>
+    <div class="editor-field">
+      <label for="e-author">Firma</label>
+      <input type="text" id="e-author" placeholder="Tu nombre o pseudónimo">
+    </div>
+    <div class="editor-field">
+      <label for="e-excerpt">Subtítulo / entradilla</label>
+      <input type="text" id="e-excerpt" placeholder="Un resumen de lo que vas a contar">
+    </div>
+    <div class="editor-field">
+      <label for="e-body">Cuerpo del artículo</label>
+      <textarea id="e-body" placeholder="Escribe tu artículo aquí..."></textarea>
+    </div>
+    <div class="editor-actions">
+      <button class="btn-cancel" onclick="closeEditor()">Cancelar</button>
+      <button class="btn-publish" onclick="publishArticle()">Publicar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const quotes = [
+    { text: '"El periodismo es el primer borrador de la historia."', author: '— Philip L. Graham' },
+    { text: '"Publica o perece. Pero antes, verifica."', author: '— Máxima redaccional' },
+    { text: '"La prensa libre puede ser buena o mala, pero sin libertad, la prensa sólo puede ser mala."', author: '— Albert Camus' },
+    { text: '"El periodismo consiste en decir a alguien lo que alguien no quiere que se sepa."', author: '— George Orwell' },
+  ];
+
+  const seed = [
+    {
+      cat: 'Investigación',
+      title: 'Las cuentas que nadie quería ver: así se financian los lobbies en Europa',
+      excerpt: 'Una investigación de tres años revela los mecanismos opacos que mueven millones entre corporaciones y despachos parlamentarios a lo largo del continente.',
+      author: 'Carmen Vidal',
+      body: 'Durante tres años, un equipo de periodistas de datos rastreó miles de documentos filtrados, registros mercantiles y contratos públicos para armar un mapa sin precedentes del dinero que circula entre los grandes grupos de presión y las instituciones europeas.\n\nLos hallazgos son demoledores: al menos 47 fondos de capital riesgo con sede en Luxemburgo y los Países Bajos han canalizado más de 800 millones de euros hacia organizaciones que, a su vez, financian a asesores directos de comisarios europeos.\n\n"No es corrupción en el sentido técnico del término", explica una fuente judicial que pidió el anonimato. "Pero el efecto sobre las políticas públicas es exactamente el mismo."\n\nLa investigación también pone el foco en España: tres fundaciones vinculadas a partidos políticos aparecen como receptoras indirectas de fondos procedentes de estos circuitos.'
+    },
+    {
+      cat: 'Opinión',
+      title: 'El silencio también es una noticia',
+      excerpt: 'Cuando los medios callan sobre lo que ocurre en los márgenes, no están siendo neutrales: están eligiendo un bando.',
+      author: 'Marcos Tello',
+      body: 'Hay una forma de mentir que no requiere decir ninguna mentira. Consiste simplemente en no hablar. En decidir que ciertos hechos no merecen portada, ni columna, ni siquiera el breve de página par.\n\nEsta semana, mientras tres cadenas de televisión debatían durante horas sobre las declaraciones de un futbolista retirado, en la cuenca del río Ebro se producía uno de los episodios de contaminación industrial más graves de los últimos veinte años. Ningún telediario lo abrió.\n\nEl periodismo ha tenido siempre dos tentaciones: la del escándalo que vende y la del poder que protege. La primera inflama, la segunda asfixia. Y en el cruce entre ambas se produce el vacío que los lectores cada vez notan más.\n\nEl silencio editorial no es neutral. Es una decisión. Y como toda decisión, tiene consecuencias.'
+    },
+    {
+      cat: 'Internacional',
+      title: 'La ruta de los refugiados que Europa prefiere no ver',
+      excerpt: 'Desde la frontera sur de Libia hasta las costas de Sicilia, miles de personas recorren cada mes un camino que los mapas oficiales no registran.',
+      author: 'Sofía Ramos',
+      body: 'El convoy salió de Agadez un miércoles antes del amanecer. Dieciséis personas en una pick-up sin matrícula, con bidones de agua y gasolina ocupando cada centímetro disponible.\n\n"Si llegas, llegas. Si no, nadie sabe que ibas", dijo el conductor.\n\nEsta travesía, que se repite cientos de veces al mes, forma parte de una de las rutas migratorias más mortales del planeta. Sin embargo, las cifras oficiales apenas recogen una fracción de las muertes reales.\n\nLos organismos humanitarios estiman que por cada muerte documentada en el Mediterráneo, entre tres y cinco se producen en el trayecto terrestre previo. Un número que nadie quiere convertir en política.'
+    },
+    {
+      cat: 'Cultura',
+      title: '"La prensa mató a mi personaje", el documental que incomoda a las redacciones',
+      excerpt: 'Un filmmaker analiza diez casos en los que la cobertura mediática destruyó reputaciones que resultaron inocentes.',
+      author: 'Irene Casas',
+      body: 'Hay una escena hacia el final del documental que resulta insoportable. Un periodista veterano, premiado, respetado, sostiene en cámara que haría exactamente lo mismo si pudiera volver atrás. Que la noticia era la noticia.\n\nLo que no dice es que la persona de la que habla pasó cuatro años sin trabajo, perdió su matrimonio y estuvo a punto de quitarse la vida.\n\nEl documental no es un alegato contra el periodismo. Es algo más incómodo: un espejo.\n\n¿Cuándo la urgencia informativa se convierte en impunidad? ¿Quién responde cuando la rectificación llega tarde y en letra pequeña? Estas preguntas no tienen respuesta fácil.'
+    },
+    {
+      cat: 'Actualidad',
+      title: 'Los datos que el gobierno publicó... pero nadie leyó',
+      excerpt: 'Un informe de 847 páginas sobre empleo juvenil estuvo disponible durante 72 horas antes de desaparecer del portal de transparencia.',
+      author: 'David Fuentes',
+      body: 'Apareció un jueves por la tarde. 847 páginas en formato PDF, sin nota de prensa, sin resumen ejecutivo. El informe sobre precariedad laboral en menores de 30 años era, según varios expertos, el más completo elaborado en la última década.\n\nEl domingo por la noche ya no estaba.\n\nDesde el Ministerio de Trabajo aseguran que se trató de "un error técnico de catalogación". Llevan tres semanas diciéndolo.\n\nUna copia del informe revela que la tasa de subempleo entre jóvenes de 18 a 24 años supera el 41% en seis comunidades autónomas, un dato que contradice directamente las cifras oficiales difundidas en sede parlamentaria el mes pasado.'
+    },
+  ];
+
+  let articles = [...seed];
+  let currentFilter = '';
+
+  function getDate() {
+    return new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  document.getElementById('today-date').textContent = getDate();
+
+  const qi = Math.floor(Math.random() * quotes.length);
+  document.getElementById('quote-text').textContent = quotes[qi].text;
+  document.getElementById('quote-author').textContent = quotes[qi].author;
+
+  function renderFeatured(list) {
+    const main = list[0];
+    const sides = list.slice(1, 4);
+    document.getElementById('featured-main').innerHTML = `
+      <div class="category-tag">${main.cat}</div>
+      <div class="article-title" style="font-size:28px" onclick="openArticle(${articles.indexOf(main)})">${main.title}</div>
+      <p class="article-excerpt">${main.excerpt}</p>
+      <div class="article-byline">Por ${main.author} &mdash; ${getDate()}</div>
+    `;
+    document.getElementById('side-articles').innerHTML = sides.map(a => `
+      <div class="side-article">
+        <div class="category-tag">${a.cat}</div>
+        <div class="article-title" onclick="openArticle(${articles.indexOf(a)})">${a.title}</div>
+        <p class="article-excerpt">${a.excerpt}</p>
+        <div class="article-byline">Por ${a.author}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderCards(list) {
+    const cards = list.slice(4);
+    if (!cards.length) {
+      document.getElementById('card-grid').innerHTML = '<p class="empty-note">Sé el primero en publicar en esta sección.</p>';
+      return;
+    }
+    document.getElementById('card-grid').innerHTML = cards.map(a => `
+      <div class="card" onclick="openArticle(${articles.indexOf(a)})">
+        <div class="category-tag">${a.cat}</div>
+        <div class="article-title">${a.title}</div>
+        <p class="article-excerpt">${a.excerpt}</p>
+        <div class="article-byline" style="margin-top:10px">Por ${a.author}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderAll() {
+    const list = currentFilter ? articles.filter(a => a.cat === currentFilter) : articles;
+    if (!list.length) {
+      document.getElementById('featured-main').innerHTML = '<p style="color:var(--text-secondary);font-size:14px">No hay artículos en esta sección aún.</p>';
+      document.getElementById('side-articles').innerHTML = '';
+      document.getElementById('card-grid').innerHTML = '';
+      return;
+    }
+    renderFeatured(list);
+    renderCards(list);
+  }
+
+  function filterCat(el, cat) {
+    currentFilter = cat;
+    document.querySelectorAll('.nav span').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    renderAll();
+  }
+
+  function openArticle(idx) {
+    const a = articles[idx];
+    document.getElementById('av-cat').textContent = a.cat;
+    document.getElementById('av-title').textContent = a.title;
+    document.getElementById('av-byline').textContent = `Por ${a.author} — ${getDate()}`;
+    document.getElementById('av-body').innerHTML = a.body.split('\n\n').map(p => `<p>${p}</p>`).join('');
+    document.getElementById('main-view').style.display = 'none';
+    document.getElementById('article-view').classList.add('open');
+    window.scrollTo(0, 0);
+  }
+
+  function closeArticle() {
+    document.getElementById('main-view').style.display = 'block';
+    document.getElementById('article-view').classList.remove('open');
+    window.scrollTo(0, 0);
+  }
+
+  function openEditor() { document.getElementById('editor-modal').classList.add('open'); }
+  function closeEditor() { document.getElementById('editor-modal').classList.remove('open'); }
+
+  function publishArticle() {
+    const title = document.getElementById('e-title').value.trim();
+    const cat = document.getElementById('e-cat').value;
+    const author = document.getElementById('e-author').value.trim() || 'Redacción';
+    const excerpt = document.getElementById('e-excerpt').value.trim();
+    const body = document.getElementById('e-body').value.trim();
+    if (!title || !body) { alert('El titular y el cuerpo del artículo son obligatorios.'); return; }
+    articles.unshift({ cat, title, excerpt: excerpt || body.slice(0, 120) + '...', author, body });
+    closeEditor();
+    ['e-title','e-author','e-excerpt','e-body'].forEach(id => document.getElementById(id).value = '');
+    renderAll();
+  }
+
+  renderAll();
+</script>
+</body>
+</html>
